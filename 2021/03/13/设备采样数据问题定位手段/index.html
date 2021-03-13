@@ -60,8 +60,11 @@
     <!-- <img src="/" alt="banner"> -->
     <div class="banner-title">
       
-        <div class="intro">
-          practice makes perfect
+        <div class="post-title">
+          
+            <div class="post-tags">
+    		    
+    	      </div>
         </div>
       
     </div>
@@ -69,25 +72,35 @@
 </div>
 
       <main class="main"id="main">
-          <section class="posts">
+          <article class="post">
   
-    <article class="post" id="post-excerpt">
-      <header>
-        <div class="post-title">
-          <h1><a class="post-title-link" href="/2021/03/13/%E8%AE%BE%E5%A4%87%E9%87%87%E6%A0%B7%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E6%89%8B%E6%AE%B5/"></a></h1>
-        </div>
-        <div class="post-meta">
-          <span class="post-time"><i class="iconfont icon-calendar"></i>2021-03-13</span>
-          
-          <!---------------------------------------->
-            
-        <!----------------------------------------->
-        </div>
-      </header>
-      <div class="post-content">
-        <!-------------->
+
+  <header>
+    <div class="post-title mobile-post-title">
+      <h1></h1>
+        <div class="post-tags">
         
-          <p>Auth： <strong>Cloverdfn</strong><br /><br><a name="Rcywi"></a></p>
+        </div>
+    </div>
+    <div class="post-meta">
+      <span class="post-time"><i class="iconfont icon-calendar"></i>2021-03-13</span>
+      
+      <!----------------------------------->
+        
+      <!----------------------------------->
+    </div>
+  </header>
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E6%9C%AC%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF"><span class="toc-text">一、基本排查思路</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E9%87%87%E6%A0%B7%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-text">设备采样数据的数据流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%89%E4%B8%AA%E9%98%B6%E6%AE%B5%E9%98%90%E8%BF%B0"><span class="toc-text">关于三个阶段阐述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8E%92%E6%9F%A5%E6%89%8B%E6%AE%B5%E5%AE%9E%E6%88%98%E6%BC%94%E7%BB%83"><span class="toc-text">二、排查手段实战演练</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E9%9B%86%E4%B8%AD%E5%99%A8-gt-FDA%E4%BE%A7%EF%BC%88%E2%91%A0%E9%98%B6%E6%AE%B5%EF%BC%89%E6%8E%92%E6%9F%A5"><span class="toc-text">1、集中器-&gt;FDA侧（①阶段）排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%9F%A5%E8%AF%A2%E7%94%B5%E8%A1%A8%E6%89%80%E5%9C%A8FDA%E5%BA%8F%E5%8F%B7"><span class="toc-text">1、查询电表所在FDA序号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9F%A5%E8%AF%A2%E7%94%B5%E8%A1%A8%E4%B8%8A%E9%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8A%A5%E6%96%87"><span class="toc-text">2、查询电表上送数据的报文</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81FDA-gt-SampleDataSvr%E4%BE%A7%EF%BC%88%E2%91%A1%E9%98%B6%E6%AE%B5%EF%BC%89%E6%8E%92%E6%9F%A5"><span class="toc-text">2、FDA-&gt;SampleDataSvr侧（②阶段）排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%9F%A5%E8%AF%A2%E7%94%B5%E8%A1%A8%E5%AF%B9%E5%BA%94%E9%87%87%E6%A0%B7%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="toc-text">1、查询电表对应采样配置信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%97%A5%E5%BF%97%E6%90%9C%E7%B4%A2%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2、日志搜索相关的信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81SampleDataSvr-gt-SqlAgent%E4%BE%A7%EF%BC%88%E2%91%A2%E9%98%B6%E6%AE%B5%EF%BC%89%E6%8E%92%E6%9F%A5"><span class="toc-text">3、SampleDataSvr-&gt;SqlAgent侧（③阶段）排查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%BF%9E%E6%8E%A5Redis%E6%9F%A5%E7%9C%8B%E9%98%9F%E5%88%97%E6%83%85%E5%86%B5"><span class="toc-text">1、连接Redis查看队列情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9F%A5%E7%9C%8B%E5%85%A5%E5%BA%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="toc-text">2、查看入库失败的日志记录</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div>
+
+
+  <div class="post-content">
+    <p>Auth： <strong>Cloverdfn</strong><br /><br><a name="Rcywi"></a></p>
 <h1 id="一、基本排查思路"><a href="#一、基本排查思路" class="headerlink" title="一、基本排查思路"></a>一、基本排查思路</h1><p><a name="8SM2G"></a></p>
 <h2 id="设备采样数据的数据流"><a href="#设备采样数据的数据流" class="headerlink" title="设备采样数据的数据流"></a>设备采样数据的数据流</h2><p>电表的采样数据由集中器主动上送到FDA层，FDA解析报文并取出数据丢入到缓存中，采样服务程序SampleDataSvr取出数据进行加工，拼接成sql语句，最后由SqlAgent服务入库。具体流程如下图。<br /><img src="https://cdn.nlark.com/yuque/0/2021/png/1703784/1614652857737-266a960b-c144-4ae7-960a-a2b46816384b.png#align=left&display=inline&height=227&margin=%5Bobject%20Object%5D&name=%E5%9B%BE%E7%89%87.png&originHeight=455&originWidth=902&size=69547&status=done&style=none&width=451" alt="图片.png"><br><a name="FariN"></a></p>
 <h2 id="关于三个阶段阐述"><a href="#关于三个阶段阐述" class="headerlink" title="关于三个阶段阐述"></a>关于三个阶段阐述</h2><p>集中器-&gt;FDA</p>
@@ -151,62 +164,24 @@
 <p><a name="0PpcD"></a></p>
 <h3 id="2、查看入库失败的日志记录"><a href="#2、查看入库失败的日志记录" class="headerlink" title="2、查看入库失败的日志记录"></a>2、查看入库失败的日志记录</h3><p>仍旧是可能存在一种情况，是SqlAgent服务拿到采样数据，拿到数据库去执行的时候，结果执行失败。原先遇到执行失败的则会丢弃，不过现在逻辑应该有所调整。继承SqlAgent服务的开发人员声称，SqlAgent服务已作调整，对于执行失败的Sql语句已被放入特定的日志文件中。据了解，该特定的日志文件名称大致以“SAS”开头，后续有“failure”等字段。因目前生产环境未查询到该文件，所以无法展示。<br /><br><br /></p>
 
-        
-        <!-------------->
-      </div>
-      <div class="post-tags">
-      
-    </div>
-    </article>
-  
-    <article class="post" id="post-excerpt">
-      <header>
-        <div class="post-title">
-          <h1><a class="post-title-link" href="/2021/03/13/hello-world/">Hello World</a></h1>
-        </div>
-        <div class="post-meta">
-          <span class="post-time"><i class="iconfont icon-calendar"></i>2021-03-13</span>
-          
-          <!---------------------------------------->
-            
-        <!----------------------------------------->
-        </div>
-      </header>
-      <div class="post-content">
-        <!-------------->
-        
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-        
-        <!-------------->
-      </div>
-      <div class="post-tags">
-      
-    </div>
-    </article>
-  
-</section>
+  </div>
+  <div class="post-footer">the end</div>
+</article>
 
           
-     <nav class="pagination">
+  <nav class="pagination post-nav">
     
+    
+      <a href="/2021/03/13/hello-world/">
+        <span class="next-post">Hello World<i class="iconfont icon-more"></i></span>
+      </a>
     
   </nav>
 
 
           
+  
+
 
       </main>
     </div>
