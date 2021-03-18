@@ -4,25 +4,6 @@
   
     
     <entry>
-      <title>Clover</title>
-      <link href="2021/03/13/Clover/"/>
-      <url>2021/03/13/Clover/</url>
-      
-        <content type="html"><![CDATA[<p>#Test</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Redis </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Hello World</title>
       <link href="2021/03/13/hello-world/"/>
       <url>2021/03/13/hello-world/</url>
