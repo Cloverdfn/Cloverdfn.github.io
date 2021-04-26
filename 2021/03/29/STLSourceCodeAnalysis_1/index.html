@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    
+    <title>Sequence Conyaniners - [vector][heap] | 一只爱音乐的Coder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1.18.0.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = true
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="Cloverdfn">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <div id="typed-strings" style="display:none">
+                        <p>一只爱音乐的Coder</p>
+                    </div>
+                    <a class="header-type-title" id="typed" href="/"></a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cknyj99r80003xxwxfvit7tlq" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Sequence Conyaniners - [vector][heap]
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-03-28T16:00:00.000Z" itemprop="datePublished">2021-03-29</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                有 <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h3><p>vector的数据安排以及操作方式，与array非常相似。两者唯一的差别在于<strong>空间运用的灵活性</strong>。array是静态空间，一旦配置了就不能改变。vector是<strong>动态空间</strong>，随着元素的加入，他的内部机制会自行扩充空间以及容纳新元素。</p>
+<p>vector的实现技术，关键在于其对大小的控制以及重新配置时的数据移动效率。一旦vector旧有空间满载，如果客户端每新增一个元素，vector内部只是扩充一个元素的空间，实为不明智，因为所谓扩充空间（不论多大），是<strong>“配置新空间  / 数据移动 / 释放旧空间”</strong>的一系列操作，时间成本很高，应加入某种未雨绸缪的考虑。</p>
+<h3 id="2、迭代器"><a href="#2、迭代器" class="headerlink" title="2、迭代器"></a>2、迭代器</h3><p>vector维护的是一个连续线性空间，所以无论器元素类型是什么，普通指针都可以作为vector的迭代器而满足所有必要的条件。vector支持随机存储，普通指针正是有着这样的能力的，所以vector提供的是**<strong>Random Access iterators</strong>**。</p>
+<span id="more"></span>
+
+
+
+<h3 id="3、数据结构"><a href="#3、数据结构" class="headerlink" title="3、数据结构"></a>3、数据结构</h3><p>vector采用的数据结构是线性连续控件。它以两个迭代器*<strong>start</strong><em>和</em><strong>finish</strong><em>分别指向配置得来的连续空间中目前已被使用的范围，并以迭代器</em><strong>end_of_storage</strong>*指向整块连续空间（含备份空间）的尾端。</p>
+<pre><code class="cpp">tmplate&lt;class T, class Alloc = alloc&gt;
+class vector
+&#123;
+...
+protected:
+    iterator start;                //表示目前使用空间的头
+    iterator end;                //表示目前使用空间的尾
+    iterator end_of_storage;    //表示目前可用空间的尾
+...
+&#125;
+</code></pre>
+<p>为了降低空间配置时的速度成本，vector实际配置的大小可能比客户端需求量更大一些，以备将来可能的扩充。这边是<strong>容量（capacity）</strong>的观念。如下图所示。</p>
+<p><img src="https://i.loli.net/2021/03/29/X2IEQPbznlGrAB8.png" alt="stl-vector.png"></p>
+<p>运用start，finish，end_of_storage三个迭代器，便可轻易地提供首尾标识、大小、容量、空容器判断等等机能。</p>
+<pre><code class="c++">tmplate&lt;class T, class Alloc = alloc&gt;
+class vector
+&#123;
+...
+public:
+    iterator begin() &#123;return start;&#125;
+    iterator end() &#123;return finish;&#125;
+    size_type size() const &#123;return size_type( end() - being() );&#125;
+    size_type capacity() const &#123;
+        return size_type( end_of_storage - begin() );
+    &#125;
+    bool empty() const &#123;return begin() == end();&#125;
+    
+    reference front() &#123;return *begin();&#125;
+    reference back() &#123;return *(end() - 1);&#125;
+...
+&#125;
+</code></pre>
+<p>关于容量，有一点想要说明。增加新元素（s）时，如果超过当时的容量，则用量会扩充至两倍。如果两倍容量仍不足，就扩张至足够大的容量。容量的扩张必须经历<strong>“重新配置、元素移动、释放原空间”</strong>等过程。</p>
+<p>所谓动态增加大小，并不是在原空间之后接续新空间（因为无法保证原空间之后尚有可控配置的空间），而是以原大小的两倍另外配置一块较大的空间，然后将原内容拷贝过来，然后才开始再原内容之后构造新元素，并释放原空间。因此，对vector的任何操作，一旦引起空间重新配置，指向原vector的所有迭代器就都失效了。</p>
+<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><h3 id="1、概述-1"><a href="#1、概述-1" class="headerlink" title="1、概述"></a>1、概述</h3><p>heap并不属于STL容器组件，他和*<strong>priority queue</strong>*相关。priority queue允许以任何次序将任何元素推进容器内，但是取出时一定是以优先权最高（也就是数值最高）的元素开始取。</p>
+<p>将binary heap 作为 priority queue 的底层机制。</p>
+<p>所谓的binary heap就是一种完全二叉树，也就是说整颗binary tree除了最底层的叶节点之外，是填满的，而最底层的叶节点由左到右又不得有空隙。如下图所示一个完全的二叉树以及array表达式：</p>
+<p><img src="https://i.loli.net/2021/04/08/uWp5qFPJ1RCLScr.png" alt="binaryheap.png"></p>
+<p>完全二叉树有一个最大的好处就是整棵树内没有任何节点漏洞，这就可以用array来存储所有的节点。为了后续的方便计算，将array的#0的位置设置为无限大值或者是无限小值，那么当完全二叉树中的某个节点位于array的i处时，他的左节点必定是位于array的2i处，他的右节点必定位于array的2i+1处，其父节点必定位于（i/2）处，通过这样的一个简单的位置规则，array可以轻易的实现出完全二叉树。事实上，上述vector可以完美替代array。</p>
+<p>根据元素的排列方式，heap可以氛围max-heap和min-heap两种，前者每个节点的键值（key）都大于或者等于其子节点键值。后者的每个节点的键值（key）都小于或者等于其子节点键值。因此，max-heap的最大值在根节点，并总是位于底层array或者vector的开始处；min-heap的最小值在根节点，并总是位于底层array或者vector的开始处；STL提供的是max-heap。</p>
+<h3 id="2、heap算法"><a href="#2、heap算法" class="headerlink" title="2、heap算法"></a>2、heap算法</h3><h4 id="1、push-heap算法"><a href="#1、push-heap算法" class="headerlink" title="1、push_heap算法"></a>1、push_heap算法</h4><pre><code class="c++">void shiftUp(int k)&#123;
+        //循环判定末尾节点是否大于其父节点
+        //大于其父节点，则当前节点和父节点交换以满足大顶堆的性质
+        //直至直至判定到根节点
+        while(k &gt; 1 &amp;&amp; data[k] &gt; data[k / 2])&#123;
+            swap(data[k], data[k / 2]);
+            k /= 2;
+        &#125;
+    &#125;
+</code></pre>
+<p>push_heap的算法是指将新来的元素加入到堆中去，该堆所要进行的调整。</p>
+<p>push_heap算法的主要步骤：</p>
+<p>1、将新增的节点加在连续空间的最后面。</p>
+<p>2、将新增的节点“上溯”。</p>
+<p>3、继续调整节点所在子树，使其满足父节点始终大于子节点。</p>
+<h4 id="2、pop-heap算法"><a href="#2、pop-heap算法" class="headerlink" title="2、pop_heap算法"></a>2、pop_heap算法</h4><pre><code class="c++">void shiftDown(int k)&#123;
+        while(2 * k &lt;= count)&#123;
+            int left = 2 * k;
+            int right = left + 1;
+            int mark = left;
+            if(right &lt;= count &amp;&amp; data[right] &gt; data[left])&#123;
+                mark = right;
+            &#125;
+            if(data[k] &gt; data[mark]) break;
+            swap(data[k], data[mark]);
+            k = mark;
+        &#125;
+    &#125;
+</code></pre>
+<p>pop_heap的算法是指将首元素从堆中删除的操作，以及该堆所要进行的调整。</p>
+<p>pop_heap算法的主要步骤：</p>
+<p>1、将收尾元素互换，删除尾元素（所谓删除尾元素即把堆中“游标”移位）</p>
+<p>2、将首元素进行“下溯”操作</p>
+<p>3、找到子节点的最大值的节点</p>
+<h3 id="3、heap没有迭代器"><a href="#3、heap没有迭代器" class="headerlink" title="3、heap没有迭代器"></a>3、heap没有迭代器</h3><p>heap的所有元素都必须遵循特别的（完全二叉树）的排列规则，所以heap不提供遍历功能，也不提供迭代器。</p>
+<h3 id="4、堆的实现"><a href="#4、堆的实现" class="headerlink" title="4、堆的实现"></a>4、堆的实现</h3><pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+#include &lt;cassert&gt;
+
+using namespace std;
+
+template&lt;typename Item&gt;
+class MaxHeap&#123;
+
+private:
+    Item *data;
+    int count;
+    int capacity;
+    
+    void shiftUp(int k)&#123;
+        while(k &gt; 1 &amp;&amp; data[k] &gt; data[k / 2])&#123;
+            swap(data[k], data[k / 2]);
+            k /= 2;
+        &#125;
+    &#125;
+    
+    void shiftDown(int k)&#123;
+        while(2 * k &lt;= count)&#123;
+            int left = 2 * k;
+            int right = left + 1;
+            int mark = left;
+            if(right &lt;= count &amp;&amp; data[right] &gt; data[left])&#123;
+                mark = right;
+            &#125;
+            if(data[k] &gt; data[mark]) break;
+            swap(data[k], data[mark]);
+            k = mark;
+        &#125;
+    &#125;
+    
+    
+public:
+    MaxHeap(int capacity)&#123;
+        data = new Item[capacity + 1];
+        this-&gt;capacity = capacity;
+        count = 0;
+    &#125;
+    
+    ~MaxHeap()&#123;
+        delete [] data;
+    &#125;
+    
+    int size()&#123;
+        return count;
+    &#125;
+    
+    bool isEmpty()&#123;
+        return count == 0;
+    &#125;
+    
+    void insert(Item item)&#123;
+        assert(count + 1 &lt;= capacity);
+        data[count + 1] = item;
+        count++;
+        shiftUp(count);
+    &#125;
+    
+    Item extractMax()&#123;
+        assert(count &gt; 0);
+        Item item = data[1];
+        swap(data[1], data[count]);
+        count--;
+        shiftDown(1);
+        return item;
+    &#125;
+    
+    Item getMax()&#123;
+        assert(count &gt; 0);
+        return data[1];
+    &#125;
+    
+&#125;;
+
+int main()&#123;
+    
+    MaxHeap&lt;int &gt; maxheap = MaxHeap&lt;int &gt;(10);
+    
+    maxheap.insert(4);
+    maxheap.insert(9);
+    maxheap.insert(7);
+    maxheap.insert(3);
+    maxheap.insert(5);
+    maxheap.insert(1);
+    maxheap.insert(2);
+    maxheap.insert(8);
+    
+    int size = maxheap.size();
+    
+    for(int i = 0; i &lt; size; i++)&#123;
+        cout &lt;&lt; &quot;The maxheap item is &quot; &lt;&lt; maxheap.extractMax() &lt;&lt; endl;
+    &#125;
+    
+    return 0;
+&#125;
+</code></pre>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<nav class="article-nav">
+  
+  
+    <a href="/2021/03/20/WhyChooseToRead/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">卓有成效的管理者（1）</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Sequence Conyaniners - [vector][heap] - 一只爱音乐的Coder&url=http://cloverdfn.github.io/2021/03/29/STLSourceCodeAnalysis_1/">
+            <box-icon type='logo' name='twitter'></box-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Sequence Conyaniners - [vector][heap] - 一只爱音乐的Coder&u=http://cloverdfn.github.io/2021/03/29/STLSourceCodeAnalysis_1/">
+            <box-icon name='facebook-square' type='logo' ></box-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Sequence Conyaniners - [vector][heap] - 一只爱音乐的Coder&url=http://cloverdfn.github.io/2021/03/29/STLSourceCodeAnalysis_1/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+             
+            <aside class="sidebar">
+            
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            一只爱音乐的Coder &copy; 2021<br>
+            Powered By Hexo · Theme By <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Aomori</a>
+        </div>
+    </div>
+
+</footer>
+
+
+
+
+
+
+<script src="/dist/build.js?1.18.0.js"></script>
+
+
+<script src="/dist/custom.js?1.18.0.js"></script>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

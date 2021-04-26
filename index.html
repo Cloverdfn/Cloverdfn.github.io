@@ -110,6 +110,66 @@
   
     
       <article
+id="post-STLSourceCodeAnalysis_1"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+    <div class="article-feature">
+        <a href="/2021/03/29/STLSourceCodeAnalysis_1/">
+            <img
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E"
+            data-src="/images/STL.jpg"
+            alt="item.title"
+            class="lazy"
+            />
+        </a>
+    </div>
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/29/STLSourceCodeAnalysis_1/">Sequence Conyaniners - [vector][heap]</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><h3 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h3><p>vector的数据安排以及操作方式，与array非常相似。两者唯一的差别在于<strong>空间运用的灵活性</strong>。array是静态空间，一旦配置了就不能改变。vector是<strong>动态空间</strong>，随着元素的加入，他的内部机制会自行扩充空间以及容纳新元素。</p>
+<p>vector的实现技术，关键在于其对大小的控制以及重新配置时的数据移动效率。一旦vector旧有空间满载，如果客户端每新增一个元素，vector内部只是扩充一个元素的空间，实为不明智，因为所谓扩充空间（不论多大），是<strong>“配置新空间  / 数据移动 / 释放旧空间”</strong>的一系列操作，时间成本很高，应加入某种未雨绸缪的考虑。</p>
+<h3 id="2、迭代器"><a href="#2、迭代器" class="headerlink" title="2、迭代器"></a>2、迭代器</h3><p>vector维护的是一个连续线性空间，所以无论器元素类型是什么，普通指针都可以作为vector的迭代器而满足所有必要的条件。vector支持随机存储，普通指针正是有着这样的能力的，所以vector提供的是**<strong>Random Access iterators</strong>**。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-28T16:00:00.000Z" itemprop="datePublished">2021-03-29</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
 id="post-WhyChooseToRead"
 class="article article-type-post"
 >
@@ -305,7 +365,7 @@ class="article article-type-post"
   <div class="widget-wrap widget-cate">
     <div class="widget-title"><span>Categories</span></div>
     <div class="widget-inner">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></li></ul>
     </div>
   </div>
 
