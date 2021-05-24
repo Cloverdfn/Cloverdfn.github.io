@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>聊聊map的插入方式</title>
+      <link href="2021/04/29/STLSourceCodeAnalysis_2/"/>
+      <url>2021/04/29/STLSourceCodeAnalysis_2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>map元素插入的形式有两种，一种是使用insert()函数插入，一种是下标（subscript）的方式插入。</p><h3 id="1、insert"><a href="#1、insert" class="headerlink" title="1、insert()"></a>1、insert()</h3><p>insert()的这种插入方式在开发过程中是最经常使用的，但是我却没有深入了解到这个接口内部中去，查阅了相关材料，找到了这个接口的原型。</p><pre><code class="c++">pair&lt;iterator, bool&gt; insert(const value_type &amp;x)&#123;    return t.insert_uique(x);&#125;</code></pre><p> 这个接口最引入瞩目的就是他的返回值类型是一个pair。这个pair的第一个元素是迭代器，第二个元素是一个bool型的参数。当insert()插入操作后，bool表示的是插入操作是否成功，iterator这个迭代器在插入成功的时候，迭代器指向的就是这个元素。</p><span id="more"></span><h3 id="2、subscript"><a href="#2、subscript" class="headerlink" title="2、subscript"></a>2、subscript</h3><p>平常的开发过程中，下标的使用一般有两种，一个是赋值，一个是取值，如下。</p><pre><code class="c++">map&lt;int , int &gt; map;......map[1] = 5;            //赋值操作int num = map[1];    //取值操作</code></pre><p>要同时满足这两种操作，那么下标操作的返回值必然是取地址的传递形式，即by reference。</p><p>通过查看map的相关定义，我们可以清楚的知道，STL内部是如何实现这样操作的。</p><pre><code class="C++">class map&#123;public:    typedef Key key_type;    typedef pair&lt;const Key, T&gt; value_type;    ......public:    T&amp; operator[](const key_type &amp;k)&#123;        return (*((insert(value_type(k, T()))).first)).second;             //语句A    &#125;&#125;;</code></pre><p>语句A看似很复杂，其实从里面分析一下就可以很清晰的知道map下标操作的原理。</p><h4 id="1、value-type-k-T"><a href="#1、value-type-k-T" class="headerlink" title="1、value_type(k, T())"></a>1、value_type(k, T())</h4><p>首先构造一个map的pair，这个pair呢包括传进来的key以及默认初始化的value（由于value值不可知，所以暂时产生了一个和实际值类型相同的暂时对象）。</p><h4 id="2、insert-value-type-k-T"><a href="#2、insert-value-type-k-T" class="headerlink" title="2、insert(value_type(k, T()))"></a>2、insert(value_type(k, T()))</h4><p>其次，将我们上述构造的的pair插入到map中去。按上述所说的，该insert操作会返回一个pair，pair的第一个元素是迭代器。这个迭代器，如果是插入成功了的，就是指向插入后的新元素，如果是插入失败了的，就是指向插入失败点的旧元素。</p><h4 id="3、-insert-value-type-k-T-first"><a href="#3、-insert-value-type-k-T-first" class="headerlink" title="3、*((insert(value_type(k, T()))).first"></a>3、*((insert(value_type(k, T()))).first</h4><p>按照第二步所讲，取出insert返回给我们的pair的第一个元素，即返回的迭代器。</p><h4 id="4、-insert-value-type-k-T-first-second"><a href="#4、-insert-value-type-k-T-first-second" class="headerlink" title="4、(*((insert(value_type(k, T()))).first)).second;"></a>4、(*((insert(value_type(k, T()))).first)).second;</h4><p>最后，通过返回给我们的迭代器，取到我们所想要的值。</p><p>根据以上讲的四个步骤，着重分析一下上述谈到的“赋值”和“取值”操作。</p><p><strong>取值操作</strong>（一般是map中已有的操作）：</p><p>int num = data[5];</p><p>首先构造一个key是5的pair，在insert的时候发现map中已经有了key为5的记录，那么insert的接口返回key为5的迭代器，依据这个迭代器找到key为5的实值（value），最终这个值给到num。</p><p><strong>赋值操作</strong>：</p><p>data[5] = 7;</p><p>首先还是构造出key为5的pair，在insert的时候，接口返回的true，插入成功，拿到插入成功后的迭代器，进而取到key为5的值（默认的构造的暂时对象的值），最终将7这个值赋给到这个暂时的值。</p><p><strong>特别强调：下标操作的返回值是取地址的传递形式，即by reference。</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> STL源码分析 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>说说堆排序</title>
       <link href="2021/04/19/HeapSort/"/>
       <url>2021/04/19/HeapSort/</url>

@@ -174,6 +174,70 @@ class="article article-type-post"
   
     
       <article
+id="post-STLSourceCodeAnalysis_2"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+    <div class="article-feature">
+        <a href="/2021/04/29/STLSourceCodeAnalysis_2/">
+            <img
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E"
+            data-src="/images/STL.jpg"
+            alt="item.title"
+            class="lazy"
+            />
+        </a>
+    </div>
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/29/STLSourceCodeAnalysis_2/">聊聊map的插入方式</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>map元素插入的形式有两种，一种是使用insert()函数插入，一种是下标（subscript）的方式插入。</p>
+<h3 id="1、insert"><a href="#1、insert" class="headerlink" title="1、insert()"></a>1、insert()</h3><p>insert()的这种插入方式在开发过程中是最经常使用的，但是我却没有深入了解到这个接口内部中去，查阅了相关材料，找到了这个接口的原型。</p>
+<pre><code class="c++">pair&lt;iterator, bool&gt; insert(const value_type &amp;x)&#123;
+    return t.insert_uique(x);
+&#125;
+</code></pre>
+<p> 这个接口最引入瞩目的就是他的返回值类型是一个pair。这个pair的第一个元素是迭代器，第二个元素是一个bool型的参数。当insert()插入操作后，bool表示的是插入操作是否成功，iterator这个迭代器在插入成功的时候，迭代器指向的就是这个元素。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-28T16:00:00.000Z" itemprop="datePublished">2021-04-29</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
 id="post-HeapSort"
 class="article article-type-post"
 >
