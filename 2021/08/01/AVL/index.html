@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    
+    <title>AVL | 二叉搜索树的自平衡 | 一只爱音乐的Coder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1.18.0.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = true
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="Cloverdfn">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <div id="typed-strings" style="display:none">
+                        <p>一只爱音乐的Coder</p>
+                    </div>
+                    <a class="header-type-title" id="typed" href="/"></a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cks9rq2mt0001mswx1ac66ea1" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      AVL | 二叉搜索树的自平衡
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-07-31T16:00:00.000Z" itemprop="datePublished">2021-08-01</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E9%A5%AD%E5%90%8E%E7%94%9C%E7%82%B9/">饭后甜点</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                有 <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <h2 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h2><p>什么是二叉搜索树？</p>
+<p>二叉搜索树是一种节点值之间具有一定数量级次序的二叉树，对于树中每个节点：</p>
+<ul>
+<li><p>若其左子树存在，则其左子树中每个节点的值都不大于该节点值；</p>
+</li>
+<li><p>若其右子树存在，则其右子树中每个节点的值都不小于该节点值。</p>
+</li>
+</ul>
+<p>什么是平衡二叉树？</p>
+<p>平衡二叉树也叫自平衡二叉搜索树（Self-Balancing Binary Search Tree），所以其本质也是一颗二叉搜索树，不过为了限制左右子树的高度差，避免出现倾斜树等偏向于线性结构演化的情况，所以对二叉搜索树中每个节点的左右子树作了限制，左右子树的高度差称之为平衡因子，树中每个节点的平衡因子绝对值不大于 1，此时二叉搜索树称之为平衡二叉树。</p>
+<span id="more"></span>
+
+<h2 id="2、AVL的相关接口实现"><a href="#2、AVL的相关接口实现" class="headerlink" title="2、AVL的相关接口实现"></a>2、AVL的相关接口实现</h2><p>平衡二叉树相关的接口和二叉搜索树的接口高度相似，对比而言，只是多了一个平衡的操作。这样的一个平衡操作主要体现在<strong>新增节点</strong>和<strong>删除节点</strong>。</p>
+<h3 id="1、AVL的结点定义"><a href="#1、AVL的结点定义" class="headerlink" title="1、AVL的结点定义"></a>1、AVL的结点定义</h3><pre><code class="c++">template&lt;typename Key, typename Value&gt;
+class AVLTree&#123;
+private:
+    struct Node&#123;
+        Key key;
+        Value value;
+        Node *left;
+        Node *right;
+        
+        int height; 
+        //AVL树是通过平衡因子进行自平衡的，而平衡因子是通过左右子树高度差的来的
+        //所以AVL树的Node节点要比平衡二叉树多一个高度的成员变量
+        
+        Node(Key key, Value value)&#123;
+            this-&gt;key = key;
+            this-&gt;value = value;
+            this-&gt;left = this-&gt;right = NULL;
+        &#125;
+        
+    &#125;;
+    Node *root;    //根节点
+    int count; //设置一个count，统计二叉搜索树下的节点数量
+
+ public:
+    ......
+
+&#125;;
+</code></pre>
+<h3 id="2、AVL的自平衡逻辑"><a href="#2、AVL的自平衡逻辑" class="headerlink" title="2、AVL的自平衡逻辑"></a>2、AVL的自平衡逻辑</h3><p>二叉搜索树的插入思路其实很清晰，但是插入之后如何验证该树是否需要进行平衡呢？</p>
+<p>AVL树的自平衡通过每个节点的平衡因子实现的。我们约定平衡因子是左子树的高度减去右子树的高度，具体的代码实现如下。</p>
+<pre><code class="c++">int getBalanceFactor(Node *node)&#123;
+    if(node == NULL)
+        return 0;
+       int factor = getHeight(node-&gt;left) - getHeight(node-&gt;right);
+    return factor;
+&#125;
+</code></pre>
+<p>上述平衡因子的实现很好理解，但是平衡因子的大小意味着什么呢？</p>
+<p>刚刚说了，平衡因子其实是左节点的高度减去右节点的高度。可以明白的是，如果平衡因子是正数，那么该该节点的左子树肯定是要比右子树高的。同理，如果平衡因子是负数，那么该节点的右子树肯定是要比左子树高的。</p>
+<p>根据AVL的平衡条件，如果平衡因子（绝对值）大于1了，说明该树需要平衡了。那么应该如何做到平衡呢？分以下几个情况分析。</p>
+<p><img src="https://i.loli.net/2021/08/11/yIlb6hGFxmHM7vz.png" alt="avl.png"></p>
+<p>其实上述四种情况实际上可以简单归结为两种情况（left-left, right-right）。</p>
+<h4 id="1、left-left"><a href="#1、left-left" class="headerlink" title="1、left-left"></a>1、left-left</h4><p>图中可知，这个树是不平衡的，因为对于A节点来说他的平衡因子已经超过1了，该树不平衡的原因是B节点的插入。此时，如果我们要让这个树重新恢复平衡的话，就不能再让A节点作为根节点了，需要重新选一个节点作为根节点。</p>
+<p><img src="https://i.loli.net/2021/08/12/ez3hpHSsGVmf5TR.png" alt="left-left.png"></p>
+<p>我们可以将图中的x节点升为根节点，将y节点作为x的右节点，再将原先x节点的右节点给到y节点的左子树上。此操作我们称之为右旋转。</p>
+<p>那么，从代码逻辑上是如何判定插入/删除元素后，树结构满足left-left呢？</p>
+<pre><code class="c++">int factor = getBalanceFactor(node);
+if(factor &gt; 1 &amp;&amp; getBalanceFactor(node-&gt;left) &gt;= 0)
+    return rightRotate(node);
+</code></pre>
+<h4 id="2、right-right"><a href="#2、right-right" class="headerlink" title="2、right-right"></a>2、right-right</h4><p>同理，对于right-right结构我们可以采取左旋转的方式保持平衡。</p>
+<p><img src="https://i.loli.net/2021/08/12/FpE3mAnfyIHbZiP.png" alt="right-right.png"></p>
+<pre><code class="C++">int factor = getBalanceFactor(node);
+if(factor &lt; -1 &amp;&amp; getBalanceFactor(node-&gt;right) &lt;= 0)
+    return leftRotate(node);
+</code></pre>
+<h4 id="3、left-right"><a href="#3、left-right" class="headerlink" title="3、left-right"></a>3、left-right</h4><p>left-left和right-right可以说是AVL树的基本平衡逻辑，left-right可以通过将左子树先进行左旋转（转换成left-left），再将整个树进行右旋转。</p>
+<h4 id="4、right-left"><a href="#4、right-left" class="headerlink" title="4、right-left"></a>4、right-left</h4><p>同理，right-left可以通过将右子树先进行右旋转（转换成right-right），再将整个树进行左旋转。</p>
+<h3 id="3、AVL的自平衡代码实现"><a href="#3、AVL的自平衡代码实现" class="headerlink" title="3、AVL的自平衡代码实现"></a>3、AVL的自平衡代码实现</h3><h4 id="1、左旋转"><a href="#1、左旋转" class="headerlink" title="1、左旋转"></a>1、左旋转</h4><pre><code class="c++">Node* leftRotate(Node *y)&#123;
+    Node *x = y-&gt;right;
+    Node *left = x-&gt;left;
+    x-&gt;left = y;
+    y-&gt;right = left;
+    
+    //这里注意，需要调整x,y的高度，因为左右旋转之后x,y的高度将会有变化，且先更新y的高度，
+    //再变更x的高度，因为x的高度是经过y的高度算出来的。
+    y-&gt;height = 1 + max(getHeight(y-&gt;left), getHeight(y-&gt;right));
+    x-&gt;height = 1 + max(getHeight(x-&gt;left), getHeight(x-&gt;right));
+    
+    return x;
+&#125;
+</code></pre>
+<h4 id="2、右旋转"><a href="#2、右旋转" class="headerlink" title="2、右旋转"></a>2、右旋转</h4><pre><code class="c++">Node* leftRotate(Node *y)&#123;
+    Node *x = y-&gt;right;
+    Node *left = x-&gt;left;
+    x-&gt;left = y;
+    y-&gt;right = left;
+    
+    //这里注意，需要调整x,y的高度，因为左右旋转之后x,y的高度将会有变化，且先更新y的高度，
+    //再变更x的高度，因为x的高度是经过y的高度算出来的。
+    y-&gt;height = 1 + max(getHeight(y-&gt;left), getHeight(y-&gt;right));
+    x-&gt;height = 1 + max(getHeight(x-&gt;left), getHeight(x-&gt;right));
+    
+    return x;
+&#125;
+</code></pre>
+<h4 id="3、插入-删除-操作之后的平衡判定逻辑"><a href="#3、插入-删除-操作之后的平衡判定逻辑" class="headerlink" title="3、插入/删除 操作之后的平衡判定逻辑"></a>3、插入/删除 操作之后的平衡判定逻辑</h4><pre><code class="c++">Node *insert(Node node, Key key Value value)&#123;
+
+    ......
+        
+    node-&gt;height = 1 + max(getHeight(node-&gt;left), getHeight(node-&gt;right));
+    int factor = getBalanceFactor(node);
+
+    //left-left
+    if(factor &gt; 1 &amp;&amp; getBalanceFactor(node-&gt;left) &gt;= 0)
+        return rightRotate(node);
+    //right-right
+    if(factor &lt; -1 &amp;&amp; getBalanceFactor(node-&gt;right) &lt;= 0)
+        return leftRotate(node);
+    //left-right
+    if(factor &gt; 1 &amp;&amp; getBalanceFactor(node-&gt;left) &lt; 0)&#123;
+        node-&gt;left = leftRotate(node-&gt;left);
+        return rightRotate(node);
+    &#125;
+    //right-left
+    if(factor &lt; -1 &amp;&amp; getBalanceFactor(node-&gt;right) &gt; 0)&#123;
+        node-&gt;right = rightRotate(node-&gt;right);
+        return leftRotate(node);
+    &#125;
+    
+    return node;
+&#125;
+</code></pre>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<nav class="article-nav">
+  
+  
+    <a href="/2021/06/03/QRedis-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Redis | 缓存雪崩、穿透</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=AVL | 二叉搜索树的自平衡 - 一只爱音乐的Coder&url=http://cloverdfn.github.io/2021/08/01/AVL/">
+            <box-icon type='logo' name='twitter'></box-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=AVL | 二叉搜索树的自平衡 - 一只爱音乐的Coder&u=http://cloverdfn.github.io/2021/08/01/AVL/">
+            <box-icon name='facebook-square' type='logo' ></box-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=AVL | 二叉搜索树的自平衡 - 一只爱音乐的Coder&url=http://cloverdfn.github.io/2021/08/01/AVL/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+             
+            <aside class="sidebar">
+            
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A5%AD%E5%90%8E%E7%94%9C%E7%82%B9/">饭后甜点</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            一只爱音乐的Coder &copy; 2021<br>
+            Powered By Hexo · Theme By <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Aomori</a>
+        </div>
+    </div>
+
+</footer>
+
+
+
+
+
+
+<script src="/dist/build.js?1.18.0.js"></script>
+
+
+<script src="/dist/custom.js?1.18.0.js"></script>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
